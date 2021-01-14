@@ -9,21 +9,18 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hu.ponte.hr.Utils;
 import hu.ponte.hr.services.ImageStore;
 
 @RestController()
 @RequestMapping("api/images")
 public class ImagesController {
-	
-	private static Logger logger = LogManager.getLogger(ImagesController.class);
 
     @Autowired
     private ImageStore imageStore;
@@ -36,14 +33,23 @@ public class ImagesController {
 		return imageMetaRepository.findAll();
     }
 
+    /**
+     * Visszatér az előnézeti képpel, illetve létrehozza, ha nem létezik
+     * 
+     * @param id kép adatbázis metaadat azonosítója
+     * @param response válasz a képpel
+     * @throws IllegalArgumentException ha helytelen az id
+     * @throws FileNotFoundException ha nem sikeül létrehozni az előnézetet
+     * @throws IOException ha nem sikerül kiolvasni a lemezről
+     */
     @GetMapping("preview/{id}")
     public void getImage(@PathVariable("id") String id, HttpServletResponse response) throws IllegalArgumentException, FileNotFoundException, IOException {
     	String method = "getImage";
-    	logger.trace("Method {}: searching for {}",method, id);
+    	Utils.log(method, "searching for " + id);
     	ImageMeta imageMeta = imageMetaRepository.findById(id)
     			.orElseThrow(() -> new IllegalArgumentException("Image " + id + " not found"));
     	
-    	logger.trace("Method {}: imageMeta is {}",method, imageMeta);
+    	Utils.log(method, "imageMeta is " + imageMeta);
     	
     	File preview = new File(ImageStore.IMAGEFOLDER + imageMeta.getId() + "/preview.jpg");
     	

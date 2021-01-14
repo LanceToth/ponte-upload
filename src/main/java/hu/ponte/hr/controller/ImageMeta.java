@@ -1,5 +1,6 @@
 package hu.ponte.hr.controller;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class ImageMeta
 	private String name;
 	private String mimeType;
 	private long size;
+	@Column(columnDefinition="TEXT")
 	private String digitalSign;
 	
 	public ImageMeta(String name, String mimeType, long size) {

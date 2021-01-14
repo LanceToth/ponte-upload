@@ -21,6 +21,16 @@ public class ImageStore {
 	public static final String IMAGEFOLDER = "/ponte/imagestore/";
 	public static final Integer TARGETSIZE = 100;
 	
+	/**
+	 * A képeket az adatbázis azonosító alapján helyezzük el a lemezen,
+	 * hogy a fájlnév ismétlése ne jelentsen gondot és a meta adatok alapján könnyen meg lehessen találni
+	 * 
+	 * @param uploadedImage a feltöltendő kép
+	 * @param imageMeta az adatbázisban táolt metaadatok
+	 * @return sikeres tárolás
+	 * @throws FileNotFoundException ha nem sikeült létrehozni a fájlt
+	 * @throws IOException írási hiba esetén
+	 */
 	public boolean store(MultipartFile uploadedImage, ImageMeta imageMeta) throws FileNotFoundException, IOException  {
 		
 		File subfolder = getSubfolder(imageMeta.getId());
@@ -36,6 +46,16 @@ public class ImageStore {
 		return true;
 	}
 	
+	/**
+	 * Létrehozza az előnézeti képet, amikor szükség van rá és eltárolja a lemezen fix névvel,
+	 * hogy csak egyszer kelljen létrehozni és ne kelljen táolni az elnevezését.
+	 * A megegyező név nem gond, mert minden kép külön mappába kerül.
+	 * 
+	 * @param imageMeta adatbázisban tárolt metaadatok
+	 * @return sikeres tárolás
+	 * @throws FileNotFoundException ha nem sikeült létrehozni a fájlt
+	 * @throws IOException írási hiba esetén
+	 */
 	public boolean generatePreview(ImageMeta imageMeta) throws FileNotFoundException, IOException {
 		File subfolder = getSubfolder(imageMeta.getId());
 		File originalImage = new File(subfolder, imageMeta.getName());
@@ -59,10 +79,17 @@ public class ImageStore {
 		}
 	}
 	
+	/**
+	 * A metaadat adatbázis azonosítója és a megadott könyvtá struktúra alapján visszaadja az adott kép helyét a lemezen
+	 */
 	private static File getSubfolder(String metaId) {
 		return new File(IMAGEFOLDER + metaId + "/");
 	}
 	
+	/**
+	 * Kiszámolja a kép nagyobbik dimenziója alapján, mennyivel kell osztani az oldalakat,
+	 * hogy beleférjen a kép a megadott előnézeti méretbe
+	 */
 	private static int getResizeRatio(int width, int height) {
 		int larger = width;
 		if(height > larger) {
