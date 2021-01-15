@@ -33,7 +33,7 @@ public class UploadController
     @ResponseBody
     public String handleFormUpload(@RequestParam("file") MultipartFile file) throws IOException {
     	String method = "handleFormUpload";
-    	Utils.log(method, "started");
+    	//Utils.log(method, "started");
     	
     	//Kitöltjük az adatbázis tábla tartalmát
     	ImageMeta imageMeta = new ImageMeta(file.getOriginalFilename(), file.getContentType(), file.getSize());

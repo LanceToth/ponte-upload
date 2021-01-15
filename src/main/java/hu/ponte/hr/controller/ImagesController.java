@@ -49,7 +49,7 @@ public class ImagesController {
     	ImageMeta imageMeta = imageMetaRepository.findById(id)
     			.orElseThrow(() -> new IllegalArgumentException("Image " + id + " not found"));
     	
-    	Utils.log(method, "imageMeta is " + imageMeta);
+    	//Utils.log(method, "imageMeta is " + imageMeta);
     	
     	File preview = new File(ImageStore.IMAGEFOLDER + imageMeta.getId() + "/preview.jpg");
     	
